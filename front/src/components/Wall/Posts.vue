@@ -1,5 +1,6 @@
 <script>
 import axios from "axios";
+
 export default {
     name: "Posts",
     data() {
@@ -10,33 +11,28 @@ export default {
             selectedFile: "",
             userId: localStorage.getItem("userId"),
             file: "",
-            userNom:"",
-            userPrenom:"",
             postId:"",
             singlePost: "",
-            isActive: false,
             likes : 0,
             newLike: 0,
+            currentUser: "",
+            content:"",
         }
     },
     beforeMount() {
         this.getAllPosts()
+        const userId = localStorage.getItem("userId");
+        axios.get("http://localhost:3000/api/user/" + userId, { headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
+                .then(res => {
+                this.currentUser = res.data; // l'utilisateur connecté
+            })
     },
     methods: {
-        cancel() {
-      console.log('cancel');
-      this.showDialog = false;
-      this.showDialogUser = false;
-    },
-    confirm() {
-      console.log('confirm');
-      this.showDialog = false;
-    },
     formatCreationDate(date){
             const event = new Date(date);
             const options = {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
             return event.toLocaleDateString('fr-FR', options);
-    },
+        },
 
         onFileSelected(event){
         this.selectedFile = event.target.files[0];
@@ -59,11 +55,8 @@ export default {
                 formData.append("image", this.selectedFile);
                 formData.append("userId", this.userId);
                 formData.append("description", this.description);
-            axios.post("http://localhost:3000/api/post", formData)
+            axios.post("http://localhost:3000/api/post", formData, { headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
             .then(res => {
-                //this.posts = res.data[0]; // Tous les posts
-                //this.postsNumber = res.data[1][0];
-                //console.log("Tous les posts (" + this.postsNumber + ") s'affichent !");
                 window.location.reload()
             })
         },
@@ -80,38 +73,21 @@ export default {
         window.location.reload();
         },
 
-        LikePost(postId){
-            console.log(postId);
-            let likeIcon = document.querySelector("#icon");
-            let clicked = false;
-            if(this.isPostLiked = true) {
-                likeIcon.innerHTML = `<i class="fas fa-thumbs-up"></i>`;
-                this.newLike += 1;
-            } else {
-                clicked = false;
-                likeIcon.innerHTML = `<i class="far fa-thumbs-up"></i>`;
-                this.newLike -= 1;
-            }
-            const likeUpdate = {
-                Like : this.newLike,
-                userId: localStorage.getItem("userId")
-            };
-            axios.post("http://localhost:3000/api/post/like/" + postId , likeUpdate, { headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
-                .then((res) => 
-                console.log("Vous avez liké le post !")
-               //alert("Vous avez liké le post !")
-                //window.location.reload();
-            )},
+        LikeBtn(postId){
+            console.log("l'id du post est ", postId);
         },
-        toggle() {
-            this.isActive = this.isActive ? false : true;
-        },
+
+    },
 }
 </script>
 
 <template>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+<div class="loader">
+        <i class="fas fa-sync fa-spin fa-3x"></i>
+    </div>
 
 <div class="container-md ">
 <div class="form-floating">
@@ -138,19 +114,18 @@ export default {
               <div class="card-body">
                 <div class="media mb-3 flex">
                     <div>
-                        <img v-if="post.user.profilePicture == null" src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp" class="d-block ui-w-40 rounded-circle" alt="">
-                        <img v-else
+                        <img
                         :src="post.user.profilePicture"
-                        class="d-block ui-w-40 rounded-circle"
+                        class="postAvatarImg"
                         alt="post picture"
                         title="post profile"
                         />
                         <div class="media-body ml-3">
-                            {{ post.user.prenom }} {{ post.user.nom }} {{ post.userId }}
-                            <div class="text-muted small"> {{post.id}}</div>
+                            <strong>{{ post.user.prenom }} {{ post.user.nom }}</strong> {{ post.userId }}
+                            <div class="text-muted small"></div>
                         </div>
                     </div>
-                    <div v-if="userId == post.userId" id="putPost">
+                    <div v-if="userId == post.userId || currentUser.admin == true" id="putPost">
                         <button v-on:click="getPostInfos(post.id)" class="btn-primary" id="modifyBtn">Edit <i class="fas fa-edit"></i></button>
                         <button class="btn-danger" id="deleteBtn" @click="deletePost(post.id)">Delete <i class="fa-solid fa-trash-can"></i></button>
                     </div>
@@ -167,30 +142,47 @@ export default {
                     title="post profile"
                 />     
                 <p>Crée Le {{ formatCreationDate(post.createdAt) }}</p>
+
                 
-            </div>
-            <button class="like__btn" v-on:click="LikePost(post.id)">
-                <span id="icon"><i class="far fa-thumbs-up"></i></span>
-                <span id="count">{{likes}}</span> Like
-            </button>
+                <button class=".btn-upload" @onclick="LikeBtn(post.id)">je like</button>
+            
             </div>
             </div>
+        </div>
 
          </div>
 </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 body {
     background:#eee;
 }
 #post {
     width:100%;
     margin: auto !important;
+    animation: 1278.26ms ease 2161.68ms 1 normal none running appear;
+    animation-fill-mode: both;
 }
 .posts-content{
-    margin-top:20px;    
+    margin-top:20px;
+    animation-fill-mode: both;
+    animation: 2000ms ease 2153.17ms 1 normal none running slide-top;
 }
+@keyframes appear {
+    0%    { opacity: 0; }
+    100%  { opacity: 1; }
+}
+@keyframes slide-top {
+    0% {
+      -webkit-transform: translateY(0);
+              transform: translateY(100PX);
+    }
+    100% {
+      -webkit-transform: translateY(0);
+              transform: translateY(0);
+    }
+  }
 .ui-w-40 {
     width: 40px !important;
     height: auto;
@@ -283,24 +275,88 @@ body {
     display:flex;
     flex-direction: column;
     gap: 0.2rem;
+    animation-fill-mode: both;
+    animation: 1278.26ms ease 2161.68ms 1 normal none running appear;
 }
 #postImg{
-    max-width: 90%;
+    max-width: 100%;
     height: 20rem;
     display:flex;
     margin:auto;
     min-height: 10rem;
 }
-.like__btn {
-  padding: 10px 15px;
-  background: #0080ff;
-  font-size: 18px;
-  font-family: "Open Sans", sans-serif;
-  border-radius: 5px;
-  color: #e8efff;
-  outline: none;
-  border: none;
-  cursor: pointer;
-    width: 20%;
+#modifyBtn {
+    border-radius: 25px;
 }
+#modifyBtn:hover {
+    transform: scale(1.05);
+    transition: 400ms linear;
+}
+#deleteBtn {
+    border-radius:25px;
+}
+#deleteBtn:hover {
+    transform: scale(1.05);
+    transition: 400ms linear;
+}
+.postAvatarImg{
+    width:4rem;
+    height:4rem;
+    border-radius: 40px;
+    object-fit: cover;
+}
+
+.likeBtn{
+    background: transparent;
+    border: none;
+    margin: 87px;
+    font-size: 88px;
+    outline: none;
+    color: grey;
+}
+.btns{
+    position: absolute;
+    top: 216px;
+    left: 328px;
+    display: flex;
+}
+.likeBtn i:hover{
+    cursor: pointer;
+}
+
+.loader {
+  position: fixed;
+  background-color: white;
+  height: 100vh;
+  inset: 0;
+  z-index: 3;
+  opacity: 0.9;
+  animation: loader 200ms 2s;
+  animation-fill-mode: forwards;
+  transform-origin: top;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.loader i {
+  animation: lds-ring 2s;
+  color: #9356dce6;
+}
+@keyframes loader {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 </style> 

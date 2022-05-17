@@ -1,4 +1,5 @@
 const users = require('../models/user');
+const posts = require('../models/post');
 const bcrypt = require('bcrypt');
 const multer = require ('multer');
 
@@ -17,7 +18,7 @@ exports.getOneUser = (req, res, next) =>{
           });
         }
         res.status(200).json({
-          //admin: user.is_admin,
+          admin: user.admin,
           profilePicture: user.profilePicture,
           userId: user.id,
           email: user.email,
@@ -41,7 +42,6 @@ exports.updateUser = async (req, res, next) => {
       nom: req.body.nom,
       password,
       prenom: req.body.prenom,
-      //profilePicture: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` //on modifie l'url de l'image car multer l'a crée et on vient recupérer l'url
     };
     console.log(user)
     if (req.file) {
@@ -76,7 +76,8 @@ exports.deleteUser = (req, res, next) => {
           message: "user not found",
         })
       } else{ // Sinon on supprime uniquement l'user
-          users.destroy({ where: { id: req.params.id } });
+          users.destroy({ where: { id: req.params.id } })
+          posts.destroy({ where: { id: req.params.id}})
           res.status(200).json({ message: "Compte supprimé !" });
         };
       })}

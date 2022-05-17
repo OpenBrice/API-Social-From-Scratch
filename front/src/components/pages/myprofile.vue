@@ -1,10 +1,12 @@
 <script>
 import axios from "axios";
 import Navbar from "../Layout/Navbar.vue"
+import loader from "../Effects/loader.vue"
 export default {
     name: "profilePage",
     components: {
-      Navbar
+      Navbar,
+      loader
     },
 	data(){
 		return {
@@ -17,6 +19,7 @@ export default {
       updatedAt:"",
       profilePicture: "",
       image:"https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp",
+      isUserAdmin: false,
     };
   },
   props: {
@@ -29,9 +32,6 @@ export default {
   },
   created() {
     this.getUser();
-    /*if (sessionStorage.getItem('token')===null) {
-      this.$router.push({ name: 'Login' })
-    }*/
   },
   computed: {
 	  body() {
@@ -60,6 +60,7 @@ export default {
         this.prenom = res.data.prenom;
         this.updatedAt = res.data.updatedAt;
         this.profilePicture = res.data.profilePicture;
+        this.isUserAdmin = res.data.admin;
         console.log(this.profilePicture);
         
       });
@@ -79,9 +80,10 @@ export default {
 
 <template>
 <Navbar />
+<loader></loader>
 <section class="vh-100" style="background-color: #eee;">
-  <div class="container py-5 h-100">
-    <div class="row d-flex justify-content-center align-items-center h-100">
+  <div class="container py-5">
+    <div class="row d-flex justify-content-center align-items-center scale-up-center">
       <div class="col-md-12 col-xl-4">
 
         <div class="card" style="border-radius: 15px;">
@@ -92,12 +94,17 @@ export default {
             <img v-else
                 :src="this.profilePicture"
                         alt="photo de profil"
-                        class=" rouned-circle mr-1 avatar"
+                        class=" rounded-circle mr-1 avatar"
                         id="imgAvatar"
             /> 
             <h4 class="mb-2">{{ nom }} {{ prenom }}</h4>
-            <p class="text-muted mb-4">@Programmer <span class="mx-2">|</span> <a
+
+            <p v-if="isUserAdmin == false" class="text-muted mb-4">@Programmer <span class="mx-2">|</span> <a
                 href="mailto::">{{ email }}</a></p>
+
+              <p v-else class="text-muted mb-4">@Administrateur <span class="mx-2">|</span> <a
+                href="mailto::">{{ email }}</a></p>
+
             <div class="mb-4 pb-2">
               <button type="button" class="btn btn-outline-primary btn-floating">
                 <i class="fab fa-facebook-f fa-lg"></i>
@@ -146,6 +153,35 @@ export default {
 }
 
 #imgAvatar{
-  width: 100px;
+    width: 9rem;
+    height: 9rem;
+    object-fit:cover;
 }
+@media (min-width: 1200px) {
+  .col-xl-4 {
+    flex: 0 0 auto;
+    width: 90%;
+}}
+@media (min-width: 1200px) {
+  .col-xl-4 {
+    flex: 0 0 auto;
+    width: 100%;
+}}
+.mb-3 {
+    margin-bottom: 0rem !important;
+}
+.scale-up-center {
+	animation: 400ms cubic-bezier(0.39, 0.575, 0.565, 1) 2086.29ms 1 normal both running scale-up-center;
+}
+@keyframes scale-up-center {
+  0% {
+    -webkit-transform: scale(0.5);
+            transform: scale(0.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
+
 </style>

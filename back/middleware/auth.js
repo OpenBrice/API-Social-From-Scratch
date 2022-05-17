@@ -6,14 +6,14 @@ module.exports = (req, res, next) => {
       const decodedToken = jwt.verify(token, "SecretToken")
       console.log(decodedToken);
       const userId = decodedToken.userId
-      console.log(decodedToken);
       if (req.body.userId && req.body.userId !== userId) {
-          throw "Utilisateur non-reconnu !"
+        res.redirect('/login'); 
       } else {
           next()
       }
   } 
   catch (error) {
-      res.status(400).json({ error: error || "Requête non authentifiée !" })
+    res.redirect('/login'); 
+      res.status(400).json({ error: "requête non authentifiée" || "Requête non authentifiée !" })
   }
 };

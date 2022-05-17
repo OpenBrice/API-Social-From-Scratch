@@ -36,12 +36,17 @@ const users = sequelize.define('users', {
       },
       profilePicture: {
         type: Sequelize.STRING,
+        defaultValue: "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp",
         allowNull: true,
       },
+      admin: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
 });
 
-users.hasMany(posts, { foreignKey: 'userId'});
-posts.belongsTo(users, { foreignKey: 'userId'});
+users.hasMany(posts, { onDelete: 'CASCADE'});
+posts.belongsTo(users,{ onDelete: 'CASCADE'});
 
 // Exporting User, using this constant
 // we can perform CRUD operations on 'user' table.

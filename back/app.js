@@ -17,9 +17,6 @@ const sequelize = require('./config/db.config')
 const users = require('./models/user');
 const posts = require('./models/post');
 
-// Create all the table defined using 
-// sequelize in Database
-  
 // Sync all models that are not
 // already in the database
 sequelize.sync({alter: true, force:false}); 

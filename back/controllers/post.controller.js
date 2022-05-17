@@ -1,5 +1,6 @@
 const posts = require('../models/post');
 const users = require('../models/user');
+
 const multer = require ('multer');
 
 // Create and Save a new post
@@ -46,8 +47,6 @@ exports.getOnePost = (req, res, next) => {
 // Find a single post with an id
 
 
-
-
 exports.getAllposts = (req, res, next) => {
     posts.findAll({
       order: [["createdAt", "DESC"]],
@@ -78,7 +77,7 @@ exports.modifyPost = (req, res) => {
   } else {
     console.log("FALSE");
   };
-  posts.update(updatedPost, { where: { id: id, userId: userId }})
+  posts.update(updatedPost, { where: { id: id}})
         .then(() => res.status(200).json({ message: 'Post modifié avec succès' }))
         .catch(error => res.status(400).json({ message: 'Impossible de modifier ce post', error }));
 }

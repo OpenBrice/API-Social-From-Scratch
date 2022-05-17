@@ -1,13 +1,27 @@
 <script>
 import Posts from "../Wall/Posts.vue"
 import Navbar from "../Layout/Navbar.vue"
+import axios from "axios";
 
 export default {
     name: "Wall",
+    data() {
+        return{
+            currentUser: "",
+            userId: localStorage.getItem("userId"),
+        }
+    },
     components: {
         Posts, 
         Navbar
-    }
+    },
+    beforeMount(){
+        const userId = localStorage.getItem("userId");
+        axios.get("http://localhost:3000/api/user/" + userId, { headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
+                .then(res => {
+                this.currentUser = res.data; // l'utilisateur connecté
+            })
+    },
 }
 </script>
 

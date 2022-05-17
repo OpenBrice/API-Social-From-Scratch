@@ -2,7 +2,6 @@ import { createApp } from 'vue' //on importe des fonctionnalités
 
 import BootstrapVue3 from 'bootstrap-vue-3'
 import { createRouter, createWebHistory } from 'vue-router'
-//import store from './store/index.js'
 
 import App from './App.vue'
 import Login from "./components/pages/Login.vue"
@@ -54,5 +53,4 @@ function isTokenValid() {
 const app = createApp(App) //fabrique l'app vue 
 app.use(BootstrapVue3) //on injecte le bootstrap
 app.use(router); //on injecte le router 
-//app.use(store)
 app.mount('#app')//on monte l'app a l'interieur de notre div qui a une id de App 

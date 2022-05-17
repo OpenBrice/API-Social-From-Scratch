@@ -1,6 +1,7 @@
 <script>
 import Navbar from "../Layout/Navbar.vue";
 import axios from "axios";
+import loader from "../Effects/loader.vue"
 
 export default {
     name: "ModifyPost",
@@ -24,10 +25,15 @@ export default {
       userId: localStorage.getItem("userId"),
       idToUpdate :this.$route.params.id,
       prenom: "",
+      currentUser: "",
     };
   },
   created(){
     this.findOnePost();
+    axios.get("http://localhost:3000/api/user/" + localStorage.getItem("userId"), { headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
+      .then(res => {
+        this.currentUser = res.data; // l'utilisateur connecté
+    })
   },
 
   methods:{
@@ -55,10 +61,10 @@ export default {
         const formData = new FormData();
         formData.append("image", this.selectedFile);
         formData.append("description", this.description);
-        formData.append("userId", this.userId)
+        //formData.append("userId", this.userId)
         console.log(formData.get("description"))
         console.log(formData.get("image"))
-        axios.put("http://localhost:3000/api/post/ModifyPost/" + idToUpdate, formData)
+        axios.put("http://localhost:3000/api/post/ModifyPost/" + idToUpdate, formData , { headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
         .then((res) => {
         console.log("le resultat après",res);
         alert("Votre Post a bien été Modifié !");
@@ -80,10 +86,11 @@ export default {
 
 <template>
 <Navbar />
+<loader></loader>
 <div class="container">
 <div class="row gutters">
 <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 " style="width: 100%;">
-<div class="card h-100">
+<div class="card">
 	<div class="card-body">
 		<div class="account-settings">
 			<div class="user-profile">
@@ -91,7 +98,7 @@ export default {
           <img v-if="profilePicture == null" src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp" class="d-block ui-w-40 rounded-circle" alt="">
           <img v-else
           :src="profilePicture"
-          class="d-block ui-w-40 rounded-circle"
+          class="avatarImg"
           alt="post picture"
           title="post profile"
           />
@@ -186,5 +193,11 @@ export default {
 .ui-w-40 {
   width: 40px !important;
   height: auto;
+}
+.avatarImg{
+  width: 4rem;
+  height: 4rem;
+  border-radius: 40px;
+  object-fit: cover;
 }
 </style>

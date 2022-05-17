@@ -40,13 +40,9 @@ export default {
                 localStorage.setItem("token",response.data.token)
                 localStorage.setItem("userId",response.data.userId)
                 this.$router.push("/myprofile");
-                //location.replace(location.origin)
           })
           .catch(error => {
-            if (error.error) {
-              return (this.errorMessage = error.error)
-            }
-            this.errorMessage = 'Problème de connexion'
+            alert('Veuillez rentrer un email et Mot de passe déjà enregistré !')
           })
     }
   }
@@ -55,14 +51,15 @@ export default {
 
 <template>
 <main class="form-signin">
+
   <form>
     <h1>Groupamania</h1>
-    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+    <h1 style="background-color: #41464;" class="h3 mb-3 fw-normal">Please sign in</h1>
 <div>
-    <p v-if="error.length">
+    <p id="errorMsg" style="color: white;" v-if="error.length">
       <b>Please correct the following errors:</b>
       <ul>
-        <li v-for="e in error" v-bind:key="e.id">
+        <li class="white" v-for="e in error" v-bind:key="e.id">
         {{e}}
         </li>
       </ul>
@@ -94,23 +91,25 @@ export default {
 </template>
 
 
-<style>
+<style scoped>
 html,
 body {
   height: 100%;
 }
 
 body {
+  margin-top: 10rem;
   align-items: center;
   padding-top: 0px;
   padding-bottom: 40px;
-  background-color: #f5f5f5;
+  background: #3399ff;
 }
 
 .form-signin {
   width: 100%;
   max-width: 330px;
   padding: 15px;
+  margin-top: auto;
   margin: auto;
 }
 
@@ -149,5 +148,13 @@ h1{
         .bd-placeholder-img-lg {
           font-size: 3.5rem;
         }
-      }
+}
+p{
+  color: white;
+}
+#errorMsg{
+      background-color: #41464b;
+    border-radius: 23px;
+    padding: 0.3rem;
+}
 </style>

@@ -1,10 +1,12 @@
 <script>
 import Navbar from "../Layout/Navbar.vue"
 import axios from "axios";
+import loader from "../Effects/loader.vue";
 export default {
     name: "profilePage",
     components: {
-      Navbar
+      Navbar,
+      loader
     },
 	data(){
 		return {
@@ -17,16 +19,15 @@ export default {
       imageUrl: "",
       prenom:"",
       createdAt: "",
-      profilePicture: ""
+      profilePicture: "",
+      regex: /^[A-Za-z0-9+_.-]+@(.+)$/,
+      error: []
     };
   },
   props: {
   },
   created() {
     this.getUser();
-    /*if (sessionStorage.getItem('token')===null) {
-      this.$router.push({ name: 'Login' })
-    }*/
   },
   computed: {
 	  body() {
@@ -47,30 +48,23 @@ export default {
         this.nom = res.data.nom;
         this.createdAt = res.data.createdAt;
         this.prenom = res.data.prenom;
-        //this.image = res.data.profilePicture;
       });
     },
     modifyUser() {
-        const updateInfos = {
-            email: this.email,
-            nom: this.nom,
-            prenom: this.prenom,
-            password: this.password,
-            //profilePicture: this.image
-        }
-        if (this.password) {
-          const password = {
-            password: this.password,
-          }
-        }
-        let formData = new FormData();
+      let regex = /^[A-Za-z0-9+_.-]+@(.+)$/; 
+         if (regex.test(this.email) === false)
+        {
+         alert("Veuillez entrer un email valide (exemple@exemple.com)")
+        } else {
+          let formData = new FormData();
       formData.append("image", this.selectedFile);
       formData.append("nom", this.nom);
       formData.append("prenom", this.prenom);
       formData.append("email", this.email);
       if (this.password) {
-        formData.append("password", this.password);
+      formData.append("password", this.password);
       }
+    
         axios.put("http://localhost:3000/api/user/" + localStorage.getItem("userId"), formData, { headers: {"Authorization": "Bearer " + localStorage.getItem("token")}})
         .then((res) => {
         this.email = res.data.email;
@@ -80,11 +74,12 @@ export default {
         this.file = res.data.file
         alert("Votre Profil a bien été Modifié !");
         this.getUser();
-        //this.imageData = res.data.profilePicture;
+        this.$router.push("/myprofile");
       })
         .catch(() => {
           this.error = "Un problème est survenu, veuillez réessayer";
         });
+    }
     },
     cancelModification() {
       this.getUser();
@@ -114,16 +109,18 @@ export default {
 
 <template>
 <Navbar />
+<loader></loader>
 <div class="container">
 <div class="row gutters">
 <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-<div class="card h-100">
+<div class="card">
 	<div class="card-body">
 		<div class="account-settings">
 			<div class="user-profile">
 				<div align="center" class="mb-3">
           <img :src="image" alt="">
-          <input type="file" @change="onFileSelected">
+          <input type="file" @change="onFileSelected" id="file" name="file" class="inputfile">
+          <label for="file">Modifier votre Photo de profil ! <i class="bi bi-card-image"></i></label>
         </div>
 				<h5 class="user-name">{{nom}} {{prenom}}</h5>
 				<h6 class="user-email">{{email}}</h6>
@@ -281,11 +278,17 @@ body {
 }
 
 img {
-  width: 10rem;
+  width: 9rem;
+  max-width: 9rem;
+  min-width: 9rem;
+  height:9rem;
+  min-height:9rem;
+  max-height:9rem;
   margin: auto;
   display: block;
   margin-bottom: 10px;
   border-radius: 160px;
+  object-fit: cover;
 }
 
 .base-image-input {
@@ -301,5 +304,21 @@ img {
 .base-image-input:hover {
   opacity: 0.5;
 }
-
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+.inputfile + label {
+    margin: 0.2rem;
+    font-size: 20px;
+    color: white;
+    background-color: #31645f;
+    display: inline-block;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
 </style>

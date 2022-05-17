@@ -9,7 +9,7 @@ const password = require('../middleware/password')
 //Authentification de l'utilisateur
 router.post("/register", password, authCtrl.signup);
 router.post("/login", authCtrl.login);
-router.get("/", userCtrl.getAllUsers);
+router.get("/", auth, userCtrl.getAllUsers);
 router.get("/:id", auth, userCtrl.getOneUser);
 router.put("/:id", auth, multer, userCtrl.updateUser);
 router.delete("/:id", auth, userCtrl.deleteUser);

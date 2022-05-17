@@ -35,7 +35,7 @@ export default {
         }
         else if(regex.test(this.email) === false)
         {
-          this.error.push("Veuillez entrer un email valide")
+          this.error.push("Veuillez entrer un email valide (exemple@exemple.com)")
         }
         else {
           console.log(this.name,this.email,this.password,this.prenom)
@@ -55,7 +55,7 @@ export default {
               })
           .catch(function (error) {
                 if (error) {
-                  console.log(error);
+                  alert("Veuillez saisir un mot de passe valide. Celui ci doit contenir:\n -Entre 5 et 10 caractères \n-Des Majuscules et Minuscules \n-2 chiffres ");
                 }
           });
         }
@@ -67,15 +67,15 @@ export default {
 
 <template>
 <main class="form-signin">
+  <div>
   <form>
     <h1>Groupamania</h1>
     <h1 class="h3 mb-3 fw-normal">Inscription</h1>
-
     <div>
-        <p v-if="error.length">
+        <p id="errorMsg" style="color: white;" v-if="error.length">
           <b>Please correct the following errors:</b>
           <ul>
-            <li v-for="e in error" v-bind:key="e.id">
+            <li class="white" v-for="e in error" v-bind:key="e.id">
             {{e}}
             </li>
           </ul>
@@ -119,6 +119,7 @@ export default {
     </div>
     <button v-on:click="createAccount()" class="w-100 btn btn-lg btn-primary" type="submit">S'inscrire</button>
   </form> 
+  </div>
 </main>
 </template>
 
@@ -133,7 +134,8 @@ body {
   align-items: center;
   padding-top: 0px;
   padding-bottom: 40px;
-  background-color: #f5f5f5;
+  background-image:url("./background.jpg");
+  background-size: cover;
 }
 
 .form-signin {
@@ -164,6 +166,7 @@ body {
 }
 h1{
   text-align: center;
+  color: white;
 }
 
   .bd-placeholder-img {
@@ -179,4 +182,18 @@ h1{
           font-size: 3.5rem;
         }
       }
+
+
+.circle{
+  position: absolute;
+  border-radius: 50%;
+  background: blue;
+  animation: ripple 15s infinite;
+  box-shadow: 0px 0px 1px 0px #508fb9;
+}
+#errorMsg{
+      background-color: #41464b;
+    border-radius: 23px;
+    padding: 0.3rem;
+}
 </style>
