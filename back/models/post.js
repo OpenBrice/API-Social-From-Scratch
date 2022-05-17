@@ -20,12 +20,6 @@ const posts = sequelize.define('posts', {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  likes: {
-    type: DataTypes.INTEGER,
-  },
-  dislikes: {
-    type: DataTypes.INTEGER,
-  },
 });
 
 

@@ -13,8 +13,6 @@ export default {
             file: "",
             postId:"",
             singlePost: "",
-            likes : 0,
-            newLike: 0,
             currentUser: "",
             content:"",
         }
@@ -71,10 +69,6 @@ export default {
         console.log("post supprimé ! "));
         alert("votre Post a bien été supprimé !")
         window.location.reload();
-        },
-
-        LikeBtn(postId){
-            console.log("l'id du post est ", postId);
         },
 
     },
@@ -141,11 +135,7 @@ export default {
                     alt="post picture"
                     title="post profile"
                 />     
-                <p>Crée Le {{ formatCreationDate(post.createdAt) }}</p>
-
-                
-                <button class=".btn-upload" @onclick="LikeBtn(post.id)">je like</button>
-            
+                <p>Crée Le {{ formatCreationDate(post.createdAt) }}</p>          
             </div>
             </div>
         </div>
@@ -305,25 +295,12 @@ body {
     border-radius: 40px;
     object-fit: cover;
 }
-
-.likeBtn{
-    background: transparent;
-    border: none;
-    margin: 87px;
-    font-size: 88px;
-    outline: none;
-    color: grey;
-}
 .btns{
     position: absolute;
     top: 216px;
     left: 328px;
     display: flex;
 }
-.likeBtn i:hover{
-    cursor: pointer;
-}
-
 .loader {
   position: fixed;
   background-color: white;
