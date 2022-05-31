@@ -1,12 +1,7 @@
 # API
-
-Le projet consiste à construire un réseau social interne pour les employés de Groupomania. Le but de cet outil est de faciliter les interactions entre collègues.
-Projet 7 du parcours "Développeur web" d'OpenClassrooms - Créez un réseau social d’entreprise
-
-
 Objectif
 
-Construire un réseau social interne pour les employés de Groupomania. Choisir la fonctionnalité à développer et fournir un MVP pour faciliter les interactions entre collègues dans un cadre plus informel. Développer les parties front-end et back-end de l'application.
+Le projet consiste à construire un réseau social interne pour les employés de Groupomania. Le but de cet outil est de faciliter les interactions entre collègues. Choisir la fonctionnalité à développer et fournir un MVP pour faciliter les interactions entre collègues dans un cadre plus informel. Développer les parties front-end et back-end de l'application.
 
 Installation
 
@@ -17,34 +12,6 @@ npm
 Vue CLI
 MySQL
 Projet Groupomania
-
-Cloner ou télécharger le repository, puis suivre les instructions suivantes :
-
-Base de données MySQL
-
-Ouvrir le terminal à partir du dossier du projet
-Se connecter à MySQL en exécutant mysql -h localhost -u root -p
-Taper le mot de passe
-Créer la base de données du projet en exécutant CREATE DATABASE groupomania_db DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-Utiliser cette base de données en exécutant USE groupomania_db;
-Importer le fichier groupomania_db.sql en exécutant SOURCE groupomania_db.sql;
-Créer un fichier .env dans lequel il faut ajouter les 4 variables DB_ en suivant l'exemple du fichier .env.example
-Renseigner l'hôte, l'utilisateur, le mot de passe et le nom de base de données
-Lancement du Backend
-
-Ouvrir un autre terminal et se déplacer dans le dossier "backend"
-Exécuter npm install
-Dans le fichier .env déjà créé, ajouter APP_DOMAIN en suivant l'exemple du fichier .env.example, ainsi que SESSION_SECRET
-Donner une valeur à cette dernière variable d'environnement
-Exécuter npm start
-Lancement du Frontend
-
-Ouvrir un autre terminal et se déplacer dans le dossier "frontend"
-Exécuter npm install
-Exécuter npm run serve
-Application Groupomania
-
-Se rendre sur http://localhost:8080 via le navigateur
 
 Instructions
 
@@ -79,8 +46,7 @@ La suppression du compte doit être possible
 L’accès à un forum où les salariés publient :
 des contenues multimédias doit être présent
 des textes doit être présent
-Les utilisateurs doivent pouvoir facilement repérer les dernières participations des employés (rôle utilisateur => adminRole 1)
-Le/la chargé de communication Groupomania doit pouvoir modérer les interactions entre salariés (rôle modérateur => adminRole 2)
+Les utilisateurs doivent pouvoir facilement repérer les dernières participations des employés (rôle utilisateur => admin)
 Technologies utilisées
 
 Technologies
@@ -89,7 +55,3 @@ Framework backend : Express
 Serveur backend : NodeJS
 Base de données : MySQL
 Instructions
-
-Pour plus de détails sur les instructions de ce projet :
-
-Spécifications
