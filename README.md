@@ -3,6 +3,9 @@ Objectif
 
 Le projet consiste à construire un réseau social interne pour les employés de Groupomania. Le but de cet outil est de faciliter les interactions entre collègues. Choisir la fonctionnalité à développer et fournir un MVP pour faciliter les interactions entre collègues dans un cadre plus informel. Développer les parties front-end et back-end de l'application.
 
+![Image](https://user-images.githubusercontent.com/94977490/171204215-59811d9b-93b8-48f1-9609-64297465e831.png)
+
+
 Installation
 
 
