@@ -5,8 +5,9 @@ Le projet consiste à construire un réseau social interne pour les employés de
 
 Installation
 
-Prérequis
+[Image](https://user-images.githubusercontent.com/94977490/171203555-83d4bd6e-1bc3-4824-85d2-1b3e246c5eba.png)
 
+Prérequis!
 Node
 npm
 Vue CLI
